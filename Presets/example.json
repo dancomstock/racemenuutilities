@@ -1,0 +1,256 @@
+{
+  "CustomisationEyeMaterialIndex":23,
+  "CurrentArchetype":0,
+  "CurrentRace":"Dark Elf",
+  "APIVersion":"v1",
+  "CustomisationBeardIndex":0,
+  "Description":"An Example Preset",
+  "EyeMaterial":"/Game/Art/Character/Modular/Eyes_Argonian/MIC_Argonian_Eyes_Teal.MIC_Argonian_Eyes_Teal",
+  "MorphTargets":{
+    "Senescence":3.0,
+    "Mouth Underbite / Overbite":-0.33864864706993,
+    "Eye socket Bruised/Bright":0.38402968645096,
+    "Cheekbones Low / High":0.34295177459717,
+    "Hair Desaturation for Argonian":0.0,
+    "Nose Nostrils Tilt Down / Up":-0.20586261153221,
+    "Complexion":0.6372035741806,
+    "Jaw Neck Slope Low / High":-0.43487349152565,
+    "Mouth Chin Short / Long":-0.32750940322876,
+    "Vampire":0.0,
+    "Eyelids Pale/Red":-0.36672568321228,
+    "Forehead Small / Large":0.37487411499023,
+    "Cheeks Gaunt / Round":0.42605364322662,
+    "Nose Tilt Down / Up":0.4437238574028,
+    "Jaw Thin / Wide":-0.19975891709328,
+    "Mouth Tilt Down / Up":-0.43008208274841,
+    "Jaw Retracted / Jutting":0.020065903663635,
+    "Jaw Concave / Convex":-0.43487349152565,
+    "Cheekbones Thin / Wide":0.35784476995468,
+    "Brow Ridge Inner Down / Up":-1.0,
+    "Forehead Short / Tall":-0.080431520938873,
+    "Lipstick Amount":0.0,
+    "Nose Bridge Shallow / Deep":0.49694812297821,
+    "Nose Sellion Thin / Wide":0.39379560947418,
+    "Nose Sellion Down / Up":-0.04167303442955,
+    "Eyes Down / Up":-0.4049958884716,
+    "Mouth Deflated / Inflated":-0.49703970551491,
+    "Nose Sellion Shallow / Deep":0.21626943349838,
+    "Face Thin / Wide":-0.24983978271484,
+    "Brow Ridge Outer Down / Up":2.0,
+    "Face Gaunt / Round":-0.49069184064865,
+    "Face Light / Heavy":0.071184396743774,
+    "Nose Sellion Lower Shallow / Deep":-0.45846432447433,
+    "Nose Region Concave / Convex":-0.25719475746155,
+    "Brow Ridge Low / High":-0.38366344571114,
+    "Chin Backward / Forward":-0.21791741251945,
+    "Nose Nostrils Thin / Wide":-0.31655323505402,
+    "Nose Nostrils Small / Large":0.20308542251587,
+    "Mouth Small / Large":-0.24080631136894,
+    "Nose Flat / Pointed":-0.29903560876846,
+    "Eyes Inward / Outward":-0.099200427532196,
+    "Mouth Sad / Happy":0.14491713047028,
+    "Mouth Retracted / Puckered":0.22942286729813,
+    "Eyes Apart / Together":0.17067474126816,
+    "Hair Length":0.41082489490509,
+    "Nose Short / Long":-0.42083498835564,
+    "Cheeks Concave / Convex":-0.029984444379807,
+    "Mouth Drawn / Pursed":0.3486892580986,
+    "Nose Down / Up":0.15620899200439,
+    "Chin Retracted / Jutting":0.46337777376175,
+    "Brow / Nose / Chin Ratio":-0.014603108167648,
+    "Chin Recessed / Pronounced":0.062150955200195,
+    "Mouth Low / High":0.32305365800858,
+    "Chin Shallow / Deep":0.33581042289734,
+    "Forehead / Sellion / Nose Ratio":0.0016327500343323,
+    "Chin Thin / Wide":0.056108295917511,
+    "Cheekbones Shallow / Pronounced":0.01991331577301,
+    "Chin Small / Large":-0.41048920154572,
+    "Nose Bridge Short / Long":-0.20845666527748,
+    "Forehead Back / Forward":0.14781641960144,
+    "Eyes Small / Large":-0.35345011949539,
+    "Mouth Retracted / Protruding":-0.43380534648895,
+    "Chin Short / Tall":0.41790521144867
+  },
+  "ColorTargets":{
+    "Root Color":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Eye socket Bruised/Bright":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Freckles":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Eyebrows Color Intensity":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Eyebrows Redness Intensity":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Cheek Blush Light/Red":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Eyelids Pale/Red":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Tip Color":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Color 3":{
+      "R":225,
+      "G":232,
+      "B":255,
+      "A":255
+    },
+    "Hair Desaturation for Argonian":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Color 2":{
+      "R":178,
+      "G":222,
+      "B":255,
+      "A":255
+    },
+    "Tip Redness":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Color 1":{
+      "R":195,
+      "G":178,
+      "B":255,
+      "A":255
+    },
+    "Lipstick Color":{
+      "R":99,
+      "G":13,
+      "B":53,
+      "A":255
+    },
+    "Salt And Pepper":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Hair Desaturation for Khajiit":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Root DyeColor":{
+      "R":72,
+      "G":43,
+      "B":11,
+      "A":255
+    },
+    "Lipstick Amount":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Ombre Constrast":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Ombre Amount":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Root Redness":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Khajiit Pattern Number":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Tip DyeColor":{
+      "R":42,
+      "G":16,
+      "B":2,
+      "A":255
+    },
+    "Skin Tone":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Eyeliner Tone":{
+      "R":178,
+      "G":178,
+      "B":178,
+      "A":255
+    },
+    "Complexion":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    },
+    "Cheekbones Flushed/Pale":{
+      "R":255,
+      "G":255,
+      "B":255,
+      "A":255
+    }
+  },
+  "CustomisationTargets":{
+    "7":0,
+    "9":1,
+    "4":12,
+    "5":0,
+    "6":0,
+    "0":23
+  },
+  "Author":"animandan",
+  "Date":"2025-04-30 13:43:37",
+  "Name":"testguy4",
+  "ModCreator":"animandan",
+  "ModVersion":"1.0.0",
+  "ModName":"RaceMenuUtilities",
+  "Hair":"/Game/Dev/Phenotypes/Hair/HP_Argonian_HR_CentralSpineCrest.HP_Argonian_HR_CentralSpineCrest",
+  "CurrentSex":0,
+  "CustomisationHairIndex":12,
+  "CustomisationMustacheIndex":0
+}
