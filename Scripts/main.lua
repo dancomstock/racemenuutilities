@@ -1,10 +1,19 @@
+--author = animandan
+--version = 1.0.0
+--date = 2025-04-30
+
+config = require("config") -- Load the config file
+delayMultiplier = config.delayMultiplier -- Multiplier for the delay time for loading each piece of a preset.
+presetLocation = config.presetLocation -- The location you want to save and load presets from.
+
+
 local UEHelpers = require("UEHelpers")
 local json = require("dkjson")
 
 
 print("[RaceMenuUtilities] Mod loaded\n")
 
-delayTime = 10 --10 ms
+delayTime = 10*delayMultiplier
 
 raceRowOrder = {
     Argonian = 1,
@@ -139,7 +148,7 @@ function SaveCharacterData(name, description, author)
     data.ModCreator = "animandan"
 
 
-    local filePath = "ue4ss\\Mods\\RaceMenuUtilities\\Presets\\" .. name .. ".json"
+    local filePath = presetLocation .. name .. ".json"
 
     -- Write to JSON file
     local file = io.open(filePath, "w")
@@ -159,7 +168,7 @@ function sleep(ms)
 end
 
 local function LoadCharacterData(name)
-    local filePath = "ue4ss\\Mods\\RaceMenuUtilities\\Presets\\" .. name .. ".json"
+    local filePath = presetLocation .. name .. ".json"
     if not filePath then
         print("No file path provided.")
         return
@@ -187,6 +196,8 @@ local function LoadCharacterData(name)
         return
     end
 
+    sleep(delayTime) -- Wait for the character to update
+
     print("CurrentRace: " .. tostring(data.CurrentRace) .. "\n")
     local raceString = data.CurrentRace:gsub("%s+", "")
     print("raceString: " .. tostring(raceString) .. "\n")
@@ -202,7 +213,7 @@ local function LoadCharacterData(name)
     print("Instance of class 'TESRace' was found")
     print("TESRacePtr: " .. tostring(TESRacePtr:GetFullName()) .. "\n")
     
-   
+   sleep(delayTime) -- Wait for the character to update
 
     NewRaceDescription = FText("racemnuutilities")
     RaceIndex = raceRowOrder[raceString]
