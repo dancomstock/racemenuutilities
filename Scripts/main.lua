@@ -28,18 +28,30 @@ raceRowOrder = {
     WoodElf = 10
 }
 
-RacesPtrArrayOrder = {
-    DarkElf = 1,
-    Imperial = 2,
-    Argonian = 3,
-    Breton = 4,
-    Orc = 5,
-    Redguard = 6,
-    Nord = 7,
-    WoodElf = 8,
-    Khajiit = 9,
-    HighElf = 10
+unloadedRaces = {
+    DarkSeducer = 1,
+    Dremora = 2,
+    GoldenSaint = 3,
+    Sheogorath = 4,
+    VampireRace = 5,
 }
+
+
+-- RacesPtrArrayOrder = {
+--     DarkElf = 1,
+--     Imperial = 2,
+--     Argonian = 3,
+--     Breton = 4,
+--     Orc = 5,
+--     Redguard = 6,
+--     Nord = 7,
+--     WoodElf = 8,
+--     Khajiit = 9,
+--     HighElf = 10
+-- }
+
+
+
 
 function getPathFromFullName(fullName)
     if not fullName then
@@ -51,8 +63,145 @@ function getPathFromFullName(fullName)
     for str in string.gmatch(fullName, "([^"..sep.."]+)") do
       table.insert(t, str)
     end
-    return t[2]
+    return t[#t]
   end
+
+function GetPhenotypeDataFields(data)
+    local VCharacterPhenotypeData = getCharacterPhenotypeData()
+    if not VCharacterPhenotypeData then
+        print("No instance of 'VCharacterPhenotypeData' was found.\n")
+        return nil
+    end
+
+    -- local data = {}
+
+    -- Get FaceMorphsSource
+    if VCharacterPhenotypeData.FaceMorphsSource and VCharacterPhenotypeData.FaceMorphsSource:IsValid() then
+        data.FaceMorphsSource = getPathFromFullName(VCharacterPhenotypeData.FaceMorphsSource:GetFullName())
+    end
+
+    -- Get FaceBaseMesh
+    if VCharacterPhenotypeData.FaceBaseMesh and VCharacterPhenotypeData.FaceBaseMesh:IsValid() then
+        data.FaceBaseMesh = getPathFromFullName(VCharacterPhenotypeData.FaceBaseMesh:GetFullName())
+    end
+
+    -- Get FaceMorphValuesMap
+    data.FaceMorphValuesMap = {}
+    if VCharacterPhenotypeData.FaceMorphValuesMap then
+        VCharacterPhenotypeData.FaceMorphValuesMap:ForEach(function(key, value)
+            data.FaceMorphValuesMap[key:get():ToString()] = value:get()
+        end)
+    end
+
+    -- Get Hair
+    if VCharacterPhenotypeData.Hair and VCharacterPhenotypeData.Hair:IsValid() then
+        data.Hair = getPathFromFullName(VCharacterPhenotypeData.Hair:GetFullName())
+    end
+    if VCharacterPhenotypeData.CustomisationBeardIndex then
+        data.CustomisationHairIndex = VCharacterPhenotypeData.CustomisationHairIndex
+    end
+
+    -- Get Eyebrows
+    if VCharacterPhenotypeData.Eyebrows and VCharacterPhenotypeData.Eyebrows:IsValid() then
+        data.Eyebrows = getPathFromFullName(VCharacterPhenotypeData.Eyebrows:GetFullName())
+    end
+
+    if VCharacterPhenotypeData.CustomisationEyebrowsIndex then
+        data.CustomisationEyebrowsIndex = VCharacterPhenotypeData.CustomisationEyebrowsIndex
+    end
+
+    -- Get Mustache
+    if VCharacterPhenotypeData.Mustache and VCharacterPhenotypeData.Mustache:IsValid() then
+        data.Mustache = getPathFromFullName(VCharacterPhenotypeData.Mustache:GetFullName())
+    end
+    if VCharacterPhenotypeData.CustomisationMustacheIndex then
+        data.CustomisationMustacheIndex = VCharacterPhenotypeData.CustomisationMustacheIndex
+    end
+
+    -- Get Beard
+    if VCharacterPhenotypeData.Beard and VCharacterPhenotypeData.Beard:IsValid() then
+        data.Beard = getPathFromFullName(VCharacterPhenotypeData.Beard:GetFullName())
+    end
+    if VCharacterPhenotypeData.CustomisationBeardIndex then
+        data.CustomisationBeardIndex = VCharacterPhenotypeData.CustomisationBeardIndex
+    end
+
+    -- Get HairColors
+    data.HairColors = {}
+    if VCharacterPhenotypeData.HairColors then
+        VCharacterPhenotypeData.HairColors:ForEach(function(key, value)
+            data.HairColors[key:get()] = { R = value:get().R, G = value:get().G, B = value:get().B, A = value:get().A }
+        end)
+    end
+
+    -- Get HairColorsL
+    data.HairColorsL = {}
+    if VCharacterPhenotypeData.HairColorsL then
+        VCharacterPhenotypeData.HairColorsL:ForEach(function(key, value)
+            data.HairColorsL[key:get()] = { R = value:get().R, G = value:get().G, B = value:get().B, A = value:get().A }
+        end)
+    end
+
+    -- Get SkinParameterDefinitions
+    if VCharacterPhenotypeData.SkinParameterDefinitions and VCharacterPhenotypeData.SkinParameterDefinitions:IsValid() then
+        data.SkinParameterDefinitions = getPathFromFullName(VCharacterPhenotypeData.SkinParameterDefinitions:GetFullName())
+    end
+
+    -- Get BodyProperties
+    if VCharacterPhenotypeData.BodyProperties then
+        data.BodyProperties = {}
+        if VCharacterPhenotypeData.BodyProperties.BoneScalingMap then
+            data.BodyProperties.BoneScalingMap = {}
+            VCharacterPhenotypeData.BodyProperties.BoneScalingMap:ForEach(function(key, value)
+                data.BodyProperties.BoneScalingMap[key:get():ToString()] = value:get()
+            end)
+        end
+    end
+
+    -- Get FaceMaterialSlotOverrides
+    data.FaceMaterialSlotOverrides = {}
+    if VCharacterPhenotypeData.FaceMaterialSlotOverrides then
+        VCharacterPhenotypeData.FaceMaterialSlotOverrides:ForEach(function(key, value)
+            data.FaceMaterialSlotOverrides[key:get():ToString()] = getPathFromFullName(value:get():GetFullName())
+        end)
+    end
+
+    -- Get SkinParametersMap
+    data.SkinParametersMap = {}
+    if VCharacterPhenotypeData.SkinParametersMap then
+        VCharacterPhenotypeData.SkinParametersMap:ForEach(function(key, value)
+            data.SkinParametersMap[key:get():ToString()] = value:get()
+        end)
+    end
+
+    -- Get SkinColorsMap
+    data.SkinColorsMap = {}
+    if VCharacterPhenotypeData.SkinColorsMap then
+        VCharacterPhenotypeData.SkinColorsMap:ForEach(function(key, value)
+            data.SkinColorsMap[key:get():ToString()] = { R = value:get().R, G = value:get().G, B = value:get().B, A = value:get().A }
+        end)
+    end
+
+    -- Get SkinColorsMapL
+    data.SkinColorsMapL = {}
+    if VCharacterPhenotypeData.SkinColorsMapL then
+        VCharacterPhenotypeData.SkinColorsMapL:ForEach(function(key, value)
+            data.SkinColorsMapL[key:get():ToString()] = { R = value:get().R, G = value:get().G, B = value:get().B, A = value:get().A }
+        end)
+    end
+
+    -- Get SenescenceLevel
+    data.SenescenceLevel = VCharacterPhenotypeData.SenescenceLevel
+
+    -- Get EyeMaterial
+    if VCharacterPhenotypeData.EyeMaterial and VCharacterPhenotypeData.EyeMaterial:IsValid() then
+        data.EyeMaterial = getPathFromFullName(VCharacterPhenotypeData.EyeMaterial:GetFullName())
+    end
+    if VCharacterPhenotypeData.CustomisationEyeMaterialIndex then
+        data.CustomisationEyeMaterialIndex = VCharacterPhenotypeData.CustomisationEyeMaterialIndex
+    end
+
+end
 
 
 
@@ -86,12 +235,6 @@ function SaveCharacterData(name, description, author)
         return
     end
 
-    local VCharacterPhenotypeData = getCharacterPhenotypeData()
-    if not VCharacterPhenotypeData then
-        print("No instance of 'VCharacterPhenotypeData' was found.\n")
-        return
-    end
-
     local data = {
         CurrentRace = UVRaceSexMenuViewModelInstance.CurrentRace:ToString(),
         CurrentSex = UVRaceSexMenuViewModelInstance.CurrentSex,
@@ -121,22 +264,7 @@ function SaveCharacterData(name, description, author)
         data.CustomisationTargets[key:get()] = value:get()
     end)
 
-
-    --save EyeColor
-    data.EyeMaterial = getPathFromFullName(VCharacterPhenotypeData.Eyematerial:GetFullName())
-    data.CustomisationEyeMaterialIndex = VCharacterPhenotypeData.CustomisationEyeMaterialIndex
-
-    --save Hair
-    data.Hair = getPathFromFullName(VCharacterPhenotypeData.Hair:GetFullName())
-    data.CustomisationHairIndex = VCharacterPhenotypeData.CustomisationHairIndex
-
-    --save Mustache
-    data.Mustache = getPathFromFullName(VCharacterPhenotypeData.Mustache:GetFullName())
-    data.CustomisationMustacheIndex = VCharacterPhenotypeData.CustomisationMustacheIndex
-
-    --save Beard
-    data.Beard = getPathFromFullName(VCharacterPhenotypeData.Beard:GetFullName())
-    data.CustomisationBeardIndex = VCharacterPhenotypeData.CustomisationBeardIndex
+    GetPhenotypeDataFields(data)
 
     data.Name = name
     data.Description = description
@@ -162,10 +290,12 @@ function SaveCharacterData(name, description, author)
     end
 end
 
+
 function sleep(ms)
     local start = os.clock()
     while os.clock() - start < ms / 1000 do end
 end
+
 
 local function LoadCharacterData(name)
     local filePath = presetLocation .. name .. ".json"
@@ -174,11 +304,6 @@ local function LoadCharacterData(name)
         return
     end
     print("File path: " .. filePath)
-    local UVRaceSexMenuViewModelInstance = FindFirstOf("VRaceSexMenuViewModel") --UVRaceSexMenuViewModel
-    if not UVRaceSexMenuViewModelInstance or not UVRaceSexMenuViewModelInstance:IsValid() then
-        print("Invalid UVRaceSexMenuViewModelInstance provided.")
-        return
-    end
     print("Loading character data from " .. filePath)
 
     local file = io.open(filePath, "r")
@@ -196,20 +321,55 @@ local function LoadCharacterData(name)
         return
     end
 
+    local UVRaceSexMenuViewModelInstance = FindFirstOf("VRaceSexMenuViewModel") --UVRaceSexMenuViewModel
+    if not UVRaceSexMenuViewModelInstance or not UVRaceSexMenuViewModelInstance:IsValid() then
+        print("Invalid UVRaceSexMenuViewModelInstance provided.")
+        return
+    end
+
+
     sleep(delayTime) -- Wait for the character to update
 
     print("CurrentRace: " .. tostring(data.CurrentRace) .. "\n")
     local raceString = data.CurrentRace:gsub("%s+", "")
     print("raceString: " .. tostring(raceString) .. "\n")
     
-    local racePtr = RacesPtrArrayOrder[raceString]
-    print("racePtr: " .. tostring(racePtr) .. "\n")
-    
-    TESRacePtr = UVRaceSexMenuViewModelInstance.RacesPtrArray[RacesPtrArrayOrder[raceString]]
-    if not TESRacePtr or not TESRacePtr:IsValid() then
-        print("No instance of class 'TESRace' was found.\n")
-        return
+    if raceRowOrder[raceString] ~= nil then
+        TESRacePtr = FindObject('TESRace', raceString)
+        if not TESRacePtr or not TESRacePtr:IsValid() then
+            print("No instance of class 'TESRace' was found.\n")
+            return
+        end
+    else
+        ExecuteInGameThread(function()
+            -- TESRaceString = string.format("/Game/Forms/actors/race/" .. raceString .. "." .. raceString)
+            -- print("TESRaceString: " .. tostring(TESRaceString) .. "\n")
+            -- TESRacePtr = LoadAsset(TESRaceString)
+            -- print("TESRacePtr: " .. tostring(TESRacePtr:GetFullName()) .. "\n")
+            -- if not TESRacePtr or not TESRacePtr:IsValid() then
+            --     print("No instance of class 'TESRace' was found.\n")
+            --     return
+            -- end
+            -- print("TESRacePtr: " .. tostring(TESRacePtr:GetFullName()) .. "\n")
+            TESRacePtr = LoadAsset(raceString)
+            print("TESRacePtr: " .. tostring(TESRacePtr:GetFullName()) .. "\n")
+            if not TESRacePtr or not TESRacePtr:IsValid() then
+                print("No instance of class 'TESRace' was found.\n")
+                return
+            end
+            print("TESRacePtr: " .. tostring(TESRacePtr:GetFullName()) .. "\n")
+        end)
+        sleep(delayTime*20) -- Wait for the character to update
     end
+
+    -- local TESRaceString = string.format("/Game/Forms/actors/race/" .. "Goldensaint" .. "." .. "Goldensaint")
+
+    
+    -- TESRacePtr = UVRaceSexMenuViewModelInstance.RacesPtrArray[RacesPtrArrayOrder[raceString]]
+    -- if not TESRacePtr or not TESRacePtr:IsValid() then
+    --     print("No instance of class 'TESRace' was found.\n")
+    --     return
+    -- end
     print("Instance of class 'TESRace' was found")
     print("TESRacePtr: " .. tostring(TESRacePtr:GetFullName()) .. "\n")
     
@@ -222,10 +382,18 @@ local function LoadCharacterData(name)
     ArchetypeIndex = data.CurrentArchetype
     bUpdateCharacter = true
 
+
+
     ExecuteInGameThread(function()
         print("Updating RaceSexArchetype: " .. tostring(NewRaceDescription) .. ", " .. tostring(RaceIndex) .. ", " .. tostring(SexIndex) .. ", " .. tostring(ArchetypeIndex) .. ", " .. tostring(TESRacePtr) .. ", " .. tostring(bUpdateCharacter))
         UVRaceSexMenuViewModelInstance:UpdateRaceSexArchetype(NewRaceDescription, RaceIndex, SexIndex, ArchetypeIndex, TESRacePtr, bUpdateCharacter)
     end)
+    
+    sleep(delayTime*10) -- Wait for the character to update
+
+    if data.BaseFaceMesh then
+        SetBaseFaceMesh(data.BaseFaceMesh)
+    end
     
     sleep(delayTime*10) -- Wait for the character to update
 
@@ -315,6 +483,51 @@ local function LoadCharacterData(name)
     sleep(delayTime) -- Wait for the character to update
 
 
+    
+    -- Set Skin Parameters
+    if data.SkinParametersMap then
+        for key, value in pairs(data.SkinParametersMap) do
+            sleep(delayTime)
+            SetSkinParameter(key, value)
+        end
+    end
+
+    sleep(delayTime)
+
+    -- -- Set Skin Colors
+    -- if data.SkinColorsMap then
+    --     for key, value in pairs(data.SkinColorsMap) do
+    --         sleep(delayTime)
+    --         local color = { R = value.R, G = value.G, B = value.B, A = value.A }
+    --         SetSkinColorParameter(key, color)
+    --     end
+    -- end
+
+    -- -- Set Skin Colors
+    if data.SkinColorsMapL then
+        for key, value in pairs(data.SkinColorsMapL) do
+            sleep(delayTime)
+            local fcolor = UKismetMathLibrary:Conv_LinearColorToColor(value, false)
+            local color = { R = fcolor.R, G = fcolor.G, B = fcolor.B, A = fcolor.A}
+            SetSkinColorParameter(key, color)
+        end
+    end
+
+    sleep(delayTime)
+
+    if data.Senescence then
+        SetSenescenceValue(data.Senescence)
+    end
+
+    if data.FaceMaterialSlotOverrides then
+        for key, value in pairs(data.FaceMaterialSlotOverrides) do
+            sleep(delayTime)
+            SetFaceMaterial(key, value)
+        end
+    end
+
+
+
     print("Character data loaded from " .. filePath)
 end
 
@@ -322,6 +535,7 @@ function printAndOutput(message, OutputDevice)
     print(string.format("[RaceMenuUtilities] %s\n",message))
     OutputDevice:Log(string.format("[RaceMenuUtilities] %s\n",message))
 end
+
 
 RegisterConsoleCommandHandler("rmu", function(FullCommand, Parameters, OutputDevice)
     -- ExecuteInGameThread(function()
@@ -425,11 +639,79 @@ RegisterConsoleCommandHandler("rmu", function(FullCommand, Parameters, OutputDev
             for _, char in ipairs(characterData) do
                 printAndOutput(string.format("%-20s %-15s %-10s %-30s %-20s %-20s", char.Name, char.Race, char.Type, char.Description, char.Author, char.Date), OutputDevice)
             end
+        elseif Parameters[1] == "set" then
+            local assetType = Parameters[2]
+            local assetPath = Parameters[3]
+    
+            if not assetType or not assetPath then
+                printAndOutput("Invalid parameters. Usage: rmu set <type> <asset>", OutputDevice)
+                return false
+            end
+    
+            if assetType == "hair" then
+                printAndOutput("Setting Hair...", OutputDevice)
+                SetHair(assetPath)
+            elseif assetType == "eyes" then
+                printAndOutput("Setting Eyes...", OutputDevice)
+                SetEyes(assetPath)
+            elseif assetType == "face" then
+                printAndOutput("Setting Base Face Mesh...", OutputDevice)
+                SetBaseFaceMesh(assetPath)
+            elseif assetType == "skin" then
+                printAndOutput("Setting Skin Parameter...", OutputDevice)
+                local parameterName = Parameters[3]
+                local value = tonumber(Parameters[4])
+                if not parameterName or not value then
+                    printAndOutput("Invalid parameters. Usage: rmu set skin <parameterName> <value>", OutputDevice)
+                    return false
+                end
+                SetSkinParameter(parameterName, value)
+            elseif assetType == "color" then
+                printAndOutput("Setting Skin Color Parameter...", OutputDevice)
+                local parameterName = Parameters[3]
+                local r = tonumber(Parameters[4])
+                local g = tonumber(Parameters[5])
+                local b = tonumber(Parameters[6])
+                local a = tonumber(Parameters[7])
+                if not parameterName or not r or not g or not b or not a then
+                    printAndOutput("Invalid parameters. Usage: rmu set color <parameterName> <r> <g> <b> <a>", OutputDevice)
+                    return false
+                end
+                SetSkinColorParameter(parameterName, { R = r, G = g, B = b, A = a })
+            elseif assetType == "sex" then
+                printAndOutput("Setting Sex...", OutputDevice)
+                local sex = Parameters[3]
+                if not sex then
+                    printAndOutput("Invalid parameters. Usage: rmu set sex <sex>", OutputDevice)
+                    return false
+                end
+                SetSex(sex)
+            elseif assetType == "senescence" then
+                printAndOutput("Setting Senescence Level...", OutputDevice)
+                local value = tonumber(Parameters[3])
+                if not value then
+                    printAndOutput("Invalid parameters. Usage: rmu set senescence <value>", OutputDevice)
+                    return false
+                end
+                SetSenescenceValue(value)
+            elseif assetType == "race" then
+                printAndOutput("Setting Race...", OutputDevice)
+                SetRace(assetPath)
+            elseif assetType == "preset" then
+                printAndOutput("Setting preset...", OutputDevice)
+                SetPreset(assetPath)
+            elseif assetType == "character" then
+                printAndOutput("Setting character...", OutputDevice)
+                SetCharacter(assetPath)
+            else
+                printAndOutput("Unknown type. Valid types are: hair, eyes, face, skin, color, sex, senescence, race.", OutputDevice)
+            end
         elseif Parameters[1] == "help" then
             printAndOutput("Available commands:\n", OutputDevice)
             printAndOutput("rmu save <name> <description>(optional) <author>(optional) - Save character data\n", OutputDevice)
             printAndOutput("rmu load <name> - Load character data\n", OutputDevice)
             printAndOutput("rmu list <sort_column>(optional) <sort_order>(optional) - List character data\n", OutputDevice)
+            printAndOutput("rmu set <type> <asset> - Set hair, eyes, or face mesh\n", OutputDevice)
             printAndOutput("rmu help - Show this help message\n", OutputDevice)
             printAndOutput("Tips:", OutputDevice)
             printAndOutput("1. SAVE BEFORE RUNNING COMMANDS", OutputDevice)
@@ -443,3 +725,355 @@ RegisterConsoleCommandHandler("rmu", function(FullCommand, Parameters, OutputDev
 -- end)
     return true
 end)
+
+
+function SetHair(assetPath)
+    ExecuteInGameThread(function()
+        local UVRaceSexMenuViewModelInstance = FindFirstOf("VRaceSexMenuViewModel")
+        if not UVRaceSexMenuViewModelInstance or not UVRaceSexMenuViewModelInstance:IsValid() then
+            print("Invalid UVRaceSexMenuViewModelInstance provided.")
+            return
+        end
+
+        local Hair = LoadAsset(assetPath)
+        if not Hair or not Hair:IsValid() then
+            print("Failed to load hair asset: " .. assetPath)
+            return
+        end
+
+        print("Setting Hair: " .. tostring(Hair:GetFullName()))
+        UVRaceSexMenuViewModelInstance:UpdateHair(Hair, 0, true)
+    end)
+end
+
+
+function SetEyes(assetPath)
+    ExecuteInGameThread(function()
+        local UVRaceSexMenuViewModelInstance = FindFirstOf("VRaceSexMenuViewModel")
+        if not UVRaceSexMenuViewModelInstance or not UVRaceSexMenuViewModelInstance:IsValid() then
+            print("Invalid UVraceSexMenuViewModelInstance provided.")
+            return
+        end
+
+        local EyeMaterial = LoadAsset(assetPath)
+        if not EyeMaterial or not EyeMaterial:IsValid() then
+            print("Failed to load eye material asset: " .. assetPath)
+            return
+        end
+
+        print("Setting Eyes: " .. tostring(EyeMaterial:GetFullName()))
+        UVRaceSexMenuViewModelInstance:UpdateEyeColor(EyeMaterial, 0, true)
+    end)
+end
+
+function getVPhenotypeCustomizationSession()
+    local VPhenotypeCustomizationSession = FindFirstOf("VPhenotypeCustomizationSession")
+    if not VPhenotypeCustomizationSession or not VPhenotypeCustomizationSession:IsValid() then
+        print("No instance of class 'VPhenotypeCustomizationSession' was found.")
+        return
+    end
+    return VPhenotypeCustomizationSession
+end
+
+function SetBaseFaceMesh(assetPath)
+    ExecuteInGameThread(function()
+        local VPhenotypeCustomizationSession = FindFirstOf("VPhenotypeCustomizationSession")
+        if not VPhenotypeCustomizationSession or not VPhenotypeCustomizationSession:IsValid() then
+            print("No instance of class 'VPhenotypeCustomizationSession' was found.")
+            return
+        end
+
+        local FaceMesh = LoadAsset(assetPath)
+        if not FaceMesh or not FaceMesh:IsValid() then
+            print("Failed to load face mesh asset: " .. assetPath)
+            return
+        end
+
+        print("Setting Base Face Mesh: " .. tostring(FaceMesh:GetFullName()))
+        VPhenotypeCustomizationSession:SetFaceBaseMesh(FaceMesh, true)
+    end)
+end
+
+
+function SetPreset(assetPath)
+    ExecuteInGameThread(function()
+        local VPhenotypeCustomizationSession = FindFirstOf("VPhenotypeCustomizationSession")
+        if not VPhenotypeCustomizationSession or not VPhenotypeCustomizationSession:IsValid() then
+            print("No instance of class 'VPhenotypeCustomizationSession' was found.")
+            return
+        end
+
+        local Preset = LoadAsset(assetPath)
+        if not Preset or not Preset:IsValid() then
+            print("Failed to load preset asset: " .. assetPath)
+            return
+        end
+
+        print("Setting Preset: " .. tostring(Preset:GetFullName()))
+        VPhenotypeCustomizationSession:ResetCharacterToPreset(Preset)
+    end)
+end
+
+
+function SetSkinParameter(parameterName, value)
+    ExecuteInGameThread(function()
+        local VPhenotypeCustomizationSession = FindFirstOf("VPhenotypeCustomizationSession")
+        if not VPhenotypeCustomizationSession or not VPhenotypeCustomizationSession:IsValid() then
+            print("No instance of class 'VPhenotypeCustomizationSession' was found.")
+            return
+        end
+
+        keyFName = FName(parameterName)
+        if not keyFName then
+            print("Failed to create FName from key: " .. tostring(parameterName))
+            return
+        end
+
+        print("Setting Skin Parameter: " .. tostring(keyFName) .. " = " .. tostring(value))
+        VPhenotypeCustomizationSession:SetSkinParameter(keyFName, value, true)
+    end)
+end
+
+
+function SetSkinColorParameter(parameterName, color)
+    ExecuteInGameThread(function()
+        local VPhenotypeCustomizationSession = FindFirstOf("VPhenotypeCustomizationSession")
+        if not VPhenotypeCustomizationSession or not VPhenotypeCustomizationSession:IsValid() then
+            print("No instance of class 'VPhenotypeCustomizationSession' was found.")
+            return
+        end
+
+        keyFName = FName(parameterName)
+        if not keyFName then
+            print("Failed to create FName from key: " .. tostring(parameterName))
+            return
+        end
+
+        print("Setting Skin Color Parameter: " .. tostring(keyFName) .. " = " .. tostring(color.R) .. ", " .. tostring(color.G) .. ", " .. tostring(color.B) .. ", " .. tostring(color.A))
+        VPhenotypeCustomizationSession:SetSkinColorParameter(keyFName, color, true)
+    end)
+end
+
+
+function SetSex(sex)
+    ExecuteInGameThread(function()
+        local VPhenotypeCustomizationSession = FindFirstOf("VPhenotypeCustomizationSession")
+        if not VPhenotypeCustomizationSession or not VPhenotypeCustomizationSession:IsValid() then
+            print("No instance of class 'VPhenotypeCustomizationSession' was found.")
+            return
+        end
+
+        print("Setting Sex: " .. tostring(sex))
+        VPhenotypeCustomizationSession:SetSex(sex, true)
+    end)
+end
+
+
+function SetSenescenceValue(value)
+    ExecuteInGameThread(function()
+        local VPhenotypeCustomizationSession = FindFirstOf("VPhenotypeCustomizationSession")
+        if not VPhenotypeCustomizationSession or not VPhenotypeCustomizationSession:IsValid() then
+            print("No instance of class 'VPhenotypeCustomizationSession' was found.")
+            return
+        end
+
+        print("Setting Senescence Value: " .. tostring(value))
+        VPhenotypeCustomizationSession:SetSenescenceValue(value, true)
+    end)
+end
+
+
+function SetRace(race)
+    ExecuteInGameThread(function()
+        local VPhenotypeCustomizationSession = FindFirstOf("VPhenotypeCustomizationSession")
+        if not VPhenotypeCustomizationSession or not VPhenotypeCustomizationSession:IsValid() then
+            print("No instance of class 'VPhenotypeCustomizationSession' was found.")
+            return
+        end
+
+        print("Setting Race: " .. tostring(race))
+        local RaceAsset = LoadAsset(race)
+        if not RaceAsset or not RaceAsset:IsValid() then
+            print("Failed to load race asset: " .. race)
+            return
+        end
+
+        VPhenotypeCustomizationSession:SetRace(RaceAsset, true)
+    end)
+end
+
+function SetFaceMaterial(MaterialSlotName, Material)
+    ExecuteInGameThread(function()
+        local VPhenotypeCustomizationSession = FindFirstOf("VPhenotypeCustomizationSession")
+        if not VPhenotypeCustomizationSession or not VPhenotypeCustomizationSession:IsValid() then
+            print("No instance of class 'VPhenotypeCustomizationSession' was found.")
+            return
+        end
+
+        local MaterialAsset = LoadAsset(Material)
+        if not Material or not Material:IsValid() then
+            print("No instance of Material: " .. Material)
+            return
+        end
+    
+
+        UVPhenotypeCustomizationSession:SetFaceSkinMaterial(MaterialSlotName, MaterialAsset, true)
+    end)
+end
+
+function SetCharacter(AVPairedCharacter)
+    ExecuteInGameThread(function()
+        local VPhenotypeCustomizationSession = FindFirstOf("VPhenotypeCustomizationSession")
+        if not VPhenotypeCustomizationSession or not VPhenotypeCustomizationSession:IsValid() then
+            print("No instance of class 'VPhenotypeCustomizationSession' was found.")
+            return
+        end
+
+        local character = LoadAsset(AVPairedCharacter)
+        if not character or not character:IsValid() then
+            print("Failed to load character asset: " .. AVPairedCharacter)
+            return
+        end
+
+        VPhenotypeCustomizationSession:StartFromCharacter(character, true)
+
+    end)
+end
+
+
+-- ---@class UVCharacterPhenotypeData : UVBaseAltarSaveData
+-- ---@field FaceMorphsSource UVCharacterFaceMorphsSource
+-- ---@field FaceBaseMesh USkeletalMesh
+-- ---@field FaceMorphValuesMap TMap<FName, float>
+-- ---@field Hair UVCharacterHairPiece_Hair
+-- ---@field CustomisationHairIndex int32
+-- ---@field Eyebrows UVCharacterHairPiece_Eyebrows
+-- ---@field CustomisationEyebrowsIndex int32
+-- ---@field Mustache UVCharacterHairPiece_Mustache
+-- ---@field CustomisationMustacheIndex int32
+-- ---@field Beard UVCharacterHairPiece_Beard
+-- ---@field CustomisationBeardIndex int32
+-- ---@field HairColors TMap<EVFacialHairType, FColor>
+-- ---@field HairColorsL TMap<EVFacialHairType, FLinearColor>
+-- ---@field SkinParameterDefinitions UVCharacterSkinParameterDefinitions
+-- ---@field BodyProperties FBodyProperties
+-- ---@field FaceMaterialSlotOverrides TMap<FName, UMaterialInterface>
+-- ---@field SkinParametersMap TMap<FName, float>
+-- ---@field SkinColorsMap TMap<FName, FColor>
+-- ---@field SkinColorsMapL TMap<FName, FLinearColor>
+-- ---@field SenescenceLevel int32
+-- ---@field EyeMaterial UMaterialInterface
+-- ---@field CustomisationEyeMaterialIndex int32
+-- UVCharacterPhenotypeData = {}
+
+
+-- ---@class AVPairedCharacter : AVPairedPawn
+-- ---@field DockWarpTargetName FName
+-- ---@field Race UTESRace
+-- ---@field Sex ECharacterSex
+-- ---@field VoiceType EVVoiceType
+-- ---@field OnCharacterRaceChanged FVPairedCharacterOnCharacterRaceChanged
+-- ---@field OnCharacterSexChanged FVPairedCharacterOnCharacterSexChanged
+-- ---@field OnAppearanceRefreshedEnd FVPairedCharacterOnAppearanceRefreshedEnd
+-- ---@field bUseDefaultRaceAndSexPreset boolean
+-- ---@field PhenotypeData UVCharacterPhenotypeData
+-- ---@field HumanoidHeadComponent UVHumanoidHeadComponent
+-- ---@field HeadwearChildActorComponent UChildActorComponent
+-- ---@field UpperBodyChildActorComponent UChildActorComponent
+-- ---@field LowerBodyChildActorComponent UChildActorComponent
+-- ---@field HandsChildActorComponent UChildActorComponent
+-- ---@field FeetChildActorComponent UChildActorComponent
+-- ---@field AmuletChildActorComponent UChildActorComponent
+-- ---@field RightRingChildActorComponent UChildActorComponent
+-- ---@field LeftRingChildActorComponent UChildActorComponent
+-- ---@field CharacterBodyPairingComponent UVCharacterBodyPairingComponent
+-- ---@field DockingPairingComponent UVDockingPairingComponent
+-- ---@field HumanoidMotionWarpingComponent UMotionWarpingComponent
+-- ---@field CharacterAppearancePairingComponent UVCharacterAppearancePairingComponent
+-- ---@field EmotionBlendValueMultiplier float
+-- ---@field bHasUndockingQueued boolean
+-- ---@field InitialEquipmentMap TMap<EBipedModularBodySlot, FInitialEquipmentInfo>
+-- ---@field RefreshMergedMeshTimerHandle FTimerHandle
+-- AVPairedCharacter = {}
+
+
+-- ---@class UVPhenotypeCustomizationSession : UObject
+-- ---@field LinkedCharacter AVPairedCharacter
+-- ---@field Filter EVCharacterPhenotypeDataFilter
+-- UVPhenotypeCustomizationSession = {}
+
+-- ---@param InWorld UWorld
+-- function UVPhenotypeCustomizationSession:StartFromScratch(InWorld) end
+-- ---@param Character AVPairedCharacter
+-- ---@param DestroyCharacterOnSessionEnd boolean
+-- function UVPhenotypeCustomizationSession:StartFromCharacter(Character, DestroyCharacterOnSessionEnd) end
+-- ---@param ParameterName FName
+-- ---@param Value float
+-- ---@param bShouldRefreshCharacter boolean
+-- function UVPhenotypeCustomizationSession:SetSkinParameter(ParameterName, Value, bShouldRefreshCharacter) end
+-- ---@param ParameterName FName
+-- ---@param Value FColor
+-- ---@param bShouldRefreshCharacter boolean
+-- function UVPhenotypeCustomizationSession:SetSkinColorParameter(ParameterName, Value, bShouldRefreshCharacter) end
+-- ---@param Sex ECharacterSex
+-- ---@param bShouldRefreshCharacter boolean
+-- function UVPhenotypeCustomizationSession:SetSex(Sex, bShouldRefreshCharacter) end
+-- ---@param NewValue int32
+-- ---@param bShouldRefreshCharacter boolean
+-- function UVPhenotypeCustomizationSession:SetSenescenceValue(NewValue, bShouldRefreshCharacter) end
+-- ---@param NewRace UTESRace
+-- ---@param bShouldRefreshCharacter boolean
+-- function UVPhenotypeCustomizationSession:SetRace(NewRace, bShouldRefreshCharacter) end
+-- ---@param HairType EVFacialHairType
+-- ---@param HairPiece UVCharacterHairPieceBase
+-- ---@param CustomisationIndex int32
+-- ---@param bShouldRefreshCharacter boolean
+-- function UVPhenotypeCustomizationSession:SetHairPiece(HairType, HairPiece, CustomisationIndex, bShouldRefreshCharacter) end
+-- ---@param MaterialSlotName FName
+-- ---@param Material UMaterialInterface
+-- ---@param bShouldRefreshCharacter boolean
+-- function UVPhenotypeCustomizationSession:SetFaceSkinMaterial(MaterialSlotName, Material, bShouldRefreshCharacter) end
+-- ---@param Name FName
+-- ---@param Value float
+-- ---@param bShouldRefreshCharacter boolean
+-- function UVPhenotypeCustomizationSession:SetFaceMorphAxisValue(Name, Value, bShouldRefreshCharacter) end
+-- ---@param FaceBaseMesh USkeletalMesh
+-- ---@param bShouldRefreshCharacter boolean
+-- function UVPhenotypeCustomizationSession:SetFaceBaseMesh(FaceBaseMesh, bShouldRefreshCharacter) end
+-- ---@param Material UMaterialInterface
+-- ---@param CustomisationIndex int32
+-- ---@param bShouldRefreshCharacter boolean
+-- function UVPhenotypeCustomizationSession:SetEyeMaterial(Material, CustomisationIndex, bShouldRefreshCharacter) end
+-- ---@param Preset UVCharacterPhenotypePreset
+-- function UVPhenotypeCustomizationSession:ResetCharacterToPreset(Preset) end
+-- function UVPhenotypeCustomizationSession:RefreshCharacter() end
+-- function UVPhenotypeCustomizationSession:EndSession() end
+
+-- /Game/Dev/Phenotypes/PhenotypePreset_Dremora_f.PhenotypePreset_Dremora_f
+-- "/Game/Forms/actors/race/Dremora.Dremora"
+
+
+-- ---@param InPhysicsAsset UPhysicsAsset
+-- function UGroomComponent:SetPhysicsAsset(InPhysicsAsset) end
+-- ---@param InMeshDeformer UMeshDeformer
+-- function UGroomComponent:SetMeshDeformer(InMeshDeformer) end
+-- ---@param bEnable boolean
+-- function UGroomComponent:SetHairLengthScaleEnable(bEnable) end
+-- ---@param Scale float
+-- function UGroomComponent:SetHairLengthScale(Scale) end
+-- ---@param Asset UGroomAsset
+-- function UGroomComponent:SetGroomAsset(Asset) end
+-- ---@param bInEnableSimulation boolean
+-- function UGroomComponent:SetEnableSimulation(bInEnableSimulation) end
+-- ---@param InBinding UGroomBindingAsset
+-- function UGroomComponent:SetBindingAsset(InBinding) end
+-- function UGroomComponent:ResetSimulation() end
+-- function UGroomComponent:ResetCollisionComponents() end
+-- ---@param GroupIndex int32
+-- ---@return UNiagaraComponent
+-- function UGroomComponent:GetNiagaraComponent(GroupIndex) end
+-- ---@return boolean
+-- function UGroomComponent:GetIsHairLengthScaleEnabled() end
+-- ---@param SkeletalMeshComponent USkeletalMeshComponent
+-- function UGroomComponent:AddCollisionComponent(SkeletalMeshComponent) end
+
