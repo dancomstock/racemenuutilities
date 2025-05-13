@@ -1,0 +1,259 @@
+{
+  "APIVersion":"v2",
+  "CurrentSex":1,
+  "FaceMorphValuesMap":{
+    "Brow Ridge Outer Down / Up":0.0,
+    "Eyebrows Redness Intensity":1.0,
+    "Eyes Small / Large":0.0,
+    "Eyes Inward / Outward":0.0,
+    "Eyes Down / Up":0.0,
+    "Mouth Chin Short / Long":0.0,
+    "Nose Sellion Lower Shallow / Deep":0.0,
+    "Cheekbones Shallow / Pronounced":0.0,
+    "Mouth Low / High":0.0,
+    "Ombre Amount":1.0,
+    "Mouth Drawn / Pursed":0.0,
+    "Nose Short / Long":0.0,
+    "Eyelids Pale/Red":-0.29675108194351,
+    "Mouth Deflated / Inflated":0.0,
+    "Senescence":7.0,
+    "Face Light / Heavy":0.0,
+    "Vampire":0.0,
+    "Forehead Small / Large":0.0,
+    "Eye socket Bruised/Bright":-0.45528137683868,
+    "Nose Nostrils Small / Large":0.0,
+    "Chin Short / Tall":0.0,
+    "Cheeks Concave / Convex":0.0,
+    "Salt And Pepper":0.034959193319082,
+    "Cheekbones Flushed/Pale":0.65853345394135,
+    "Brow Ridge Low / High":0.0,
+    "Mouth Small / Large":0.0,
+    "Mouth Tilt Down / Up":0.0,
+    "Cheeks Gaunt / Round":0.0,
+    "Cheekbones Low / High":0.0,
+    "Mouth Retracted / Protruding":0.0,
+    "Freckles":0.5853642821312,
+    "Chin Thin / Wide":0.0,
+    "Eyebrows Color Intensity":0.5,
+    "Nose Bridge Short / Long":0.0,
+    "Chin Small / Large":0.0,
+    "Nose Down / Up":0.0,
+    "Cheekbones Thin / Wide":0.0,
+    "Nose Sellion Thin / Wide":0.0,
+    "Brow Ridge Inner Down / Up":0.0,
+    "Hair Length":1.0,
+    "Nose Sellion Shallow / Deep":0.0,
+    "Mouth Sad / Happy":0.0,
+    "Chin Shallow / Deep":0.0,
+    "Forehead / Sellion / Nose Ratio":0.0,
+    "Complexion":1.0,
+    "Face Gaunt / Round":0.0,
+    "Jaw Neck Slope Low / High":0.0,
+    "Cheek Blush Light/Red":-0.72764527797699,
+    "Chin Recessed / Pronounced":0.0,
+    "Face Thin / Wide":0.0,
+    "Jaw Thin / Wide":0.0,
+    "Forehead Short / Tall":0.0,
+    "Forehead Back / Forward":0.0,
+    "Jaw Concave / Convex":0.0,
+    "Chin Backward / Forward":0.0,
+    "Brow / Nose / Chin Ratio":0.0,
+    "Lipstick Amount":1.0,
+    "Mouth Retracted / Puckered":0.0,
+    "Mouth Underbite / Overbite":0.0,
+    "Eyes Apart / Together":0.0,
+    "Nose Sellion Down / Up":0.0,
+    "Nose Nostrils Thin / Wide":0.0,
+    "Jaw Retracted / Jutting":0.0,
+    "Nose Tilt Down / Up":0.0,
+    "Nose Bridge Shallow / Deep":0.0,
+    "Nose Flat / Pointed":0.0,
+    "Nose Region Concave / Convex":0.0,
+    "Nose Nostrils Tilt Down / Up":0.0,
+    "Chin Retracted / Jutting":0.0
+  },
+  "ModCreator":"animandan",
+  "ModVersion":"1.0.5",
+  "SkinColorsMapL":{
+    "Lipstick Amount":{
+      "A":1.0,
+      "R":1.0,
+      "G":1.0,
+      "B":1.0
+    },
+    "Eyebrows Redness Intensity":{
+      "A":1.0,
+      "R":1.0,
+      "G":1.0,
+      "B":1.0
+    },
+    "Freckles":{
+      "A":1.0,
+      "R":1.0,
+      "G":1.0,
+      "B":1.0
+    },
+    "Cheek Blush Light/Red":{
+      "A":1.0,
+      "R":1.0,
+      "G":1.0,
+      "B":1.0
+    },
+    "Tip DyeColor":{
+      "A":1.0,
+      "R":0.44520118832588,
+      "G":0.1746474057436,
+      "B":0.040915194898844
+    },
+    "Lipstick Color":{
+      "A":1.0,
+      "R":0.01032982300967,
+      "G":0.038204371929169,
+      "B":0.0
+    },
+    "Root DyeColor":{
+      "A":1.0,
+      "R":0.0027317428030074,
+      "G":0.0027317428030074,
+      "B":1.0
+    },
+    "Eyebrows Color Intensity":{
+      "A":1.0,
+      "R":1.0,
+      "G":1.0,
+      "B":1.0
+    },
+    "Salt And Pepper":{
+      "A":1.0,
+      "R":1.0,
+      "G":1.0,
+      "B":1.0
+    },
+    "Ombre Amount":{
+      "A":1.0,
+      "R":1.0,
+      "G":1.0,
+      "B":1.0
+    },
+    "Eyeliner Tone":{
+      "A":1.0,
+      "R":1.0,
+      "G":0.0,
+      "B":0.64447969198227
+    },
+    "Eye socket Bruised/Bright":{
+      "A":1.0,
+      "R":1.0,
+      "G":1.0,
+      "B":1.0
+    },
+    "Tip Redness":{
+      "A":1.0,
+      "R":1.0,
+      "G":1.0,
+      "B":1.0
+    },
+    "Root Redness":{
+      "A":1.0,
+      "R":1.0,
+      "G":1.0,
+      "B":1.0
+    },
+    "Tip Color":{
+      "A":1.0,
+      "R":1.0,
+      "G":1.0,
+      "B":1.0
+    },
+    "Ombre Constrast":{
+      "A":1.0,
+      "R":1.0,
+      "G":1.0,
+      "B":1.0
+    },
+    "Cheekbones Flushed/Pale":{
+      "A":1.0,
+      "R":1.0,
+      "G":1.0,
+      "B":1.0
+    },
+    "Khajiit Pattern Number":{
+      "A":1.0,
+      "R":1.0,
+      "G":1.0,
+      "B":1.0
+    },
+    "Eyelids Pale/Red":{
+      "A":1.0,
+      "R":1.0,
+      "G":1.0,
+      "B":1.0
+    },
+    "Complexion":{
+      "A":1.0,
+      "R":1.0,
+      "G":1.0,
+      "B":1.0
+    },
+    "Skin Tone":{
+      "A":1.0,
+      "R":0.17788840830326,
+      "G":0.35640013217926,
+      "B":1.0
+    },
+    "Root Color":{
+      "A":1.0,
+      "R":1.0,
+      "G":1.0,
+      "B":1.0
+    }
+  },
+  "Name":"example3",
+  "Date":"2025-05-04 22:51:35",
+  "SenescenceLevel":1,
+  "Description":"Can load in the world now!",
+  "SkinParametersMap":{
+    "Lipstick Amount":1.0,
+    "Eyebrows Redness Intensity":1.0,
+    "Freckles":0.5853642821312,
+    "Cheek Blush Light/Red":-0.72764527797699,
+    "Eye socket Bruised/Bright":-0.45528137683868,
+    "Ombre Amount":1.0,
+    "Eyebrows Color Intensity":0.5,
+    "Khajiit Pattern Number":0.0,
+    "Eyelids Pale/Red":-0.29675108194351,
+    "Tip Color":0.0,
+    "Ombre Constrast":0.0,
+    "Cheekbones Flushed/Pale":0.65853345394135,
+    "Complexion":0.51898586750031,
+    "Root Redness":0.0,
+    "Salt And Pepper":0.034959193319082,
+    "Tip Redness":0.0,
+    "Root Color":0.0
+  },
+  "ModName":"RaceMenuUtilities",
+  "Hair":"/Game/Dev/Phenotypes/Hair/HP_Human_HR_MediumMohawk.HP_Human_HR_MediumMohawk",
+  "CurrentRace":"Wood Elf",
+  "FaceBaseMesh":"/Game/Art/Character/WoodElf/SK_WoodElf_Head_f.SK_WoodElf_Head_f",
+  "HairColorsL":{
+    "1":{
+      "A":1.0,
+      "R":0.012152999639511,
+      "G":0.0072949999012053,
+      "B":0.0037769998889416
+    },
+    "2":{
+      "A":1.0,
+      "R":0.16145800054073,
+      "G":0.10424599796534,
+      "B":0.061027999967337
+    },
+    "0":{
+      "A":1.0,
+      "R":0.0051819998770952,
+      "G":0.0018210000125691,
+      "B":0.0018210000125691
+    }
+  },
+  "Author":"animandan"
+}
