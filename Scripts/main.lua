@@ -66,6 +66,18 @@ function getPathFromFullName(fullName)
     return t[#t]
   end
 
+function getNameFromFullName(fullName)
+    if not fullName then
+        print("Full name is nil")
+        return nil
+      end
+      sep = "."
+      local t = {}
+      for str in string.gmatch(fullName, "([^"..sep.."]+)") do
+        table.insert(t, str)
+      end
+      return t[#t]
+    end
 
 
 function GetPhenotypeDataFields(data)
@@ -115,6 +127,8 @@ function GetPhenotypeDataFields(data)
     -- Get Mustache
     if VCharacterPhenotypeData.Mustache and VCharacterPhenotypeData.Mustache:IsValid() then
         data.Mustache = getPathFromFullName(VCharacterPhenotypeData.Mustache:GetFullName())
+    else
+        data.Mustache = ("/Game/Dev/Phenotypes/Mustache/HP_MS_None.HP_MS_None")
     end
     -- if VCharacterPhenotypeData.CustomisationMustacheIndex then
     --     data.CustomisationMustacheIndex = VCharacterPhenotypeData.CustomisationMustacheIndex
@@ -123,6 +137,8 @@ function GetPhenotypeDataFields(data)
     -- Get Beard
     if VCharacterPhenotypeData.Beard and VCharacterPhenotypeData.Beard:IsValid() then
         data.Beard = getPathFromFullName(VCharacterPhenotypeData.Beard:GetFullName())
+    else
+        data.Beard = ("/Game/Dev/Phenotypes/Beard/HP_BD_None.HP_BD_None")
     end
     -- if VCharacterPhenotypeData.CustomisationBeardIndex then
     --     data.CustomisationBeardIndex = VCharacterPhenotypeData.CustomisationBeardIndex
@@ -161,12 +177,12 @@ function GetPhenotypeDataFields(data)
     -- end
 
     -- -- Get FaceMaterialSlotOverrides
-    -- data.FaceMaterialSlotOverrides = {}
-    -- if VCharacterPhenotypeData.FaceMaterialSlotOverrides then
-    --     VCharacterPhenotypeData.FaceMaterialSlotOverrides:ForEach(function(key, value)
-    --         data.FaceMaterialSlotOverrides[key:get():ToString()] = getPathFromFullName(value:get():GetFullName())
-    --     end)
-    -- end
+    data.FaceMaterialSlotOverrides = {}
+    if VCharacterPhenotypeData.FaceMaterialSlotOverrides then
+        VCharacterPhenotypeData.FaceMaterialSlotOverrides:ForEach(function(key, value)
+            data.FaceMaterialSlotOverrides[key:get():ToString()] = getPathFromFullName(value:get():GetFullName())
+        end)
+    end
 
     -- Get SkinParametersMap
     data.SkinParametersMap = {}
@@ -202,6 +218,7 @@ function GetPhenotypeDataFields(data)
     -- if VCharacterPhenotypeData.CustomisationEyeMaterialIndex then
     --     data.CustomisationEyeMaterialIndex = VCharacterPhenotypeData.CustomisationEyeMaterialIndex
     -- end
+
 end
 
 function getCharacterPhenotypeData()
@@ -227,16 +244,33 @@ function getCharacterPhenotypeData()
 end
 
 
-function SaveCharacterData(name, description, author)
-    local UVRaceSexMenuViewModelInstance = FindFirstOf("VRaceSexMenuViewModel") --UVRaceSexMenuViewModel
-    if not UVRaceSexMenuViewModelInstance or not UVRaceSexMenuViewModelInstance:IsValid() then
-        print("Invalid UVRaceSexMenuViewModelInstance provided.")
+function SaveCharacterData(name, description, author, character, save_dir)
+    local save_dir = save_dir or presetLocation
+    local VPairedCharacter = nil
+    local VCharacterPhenotypeData = nil
+    if character == nil then
+        VPairedCharacter = FindFirstOf("BP_OblivionPlayerCharacter_C")
+        if not VPairedCharacter
+        then
+            print("No instance of 'BP_OblivionPlayerCharacter_C' was found.\n")
+            return
+        end
+    else
+        VPairedCharacter = character
+    end
+    VCharacterPhenotypeData = VPairedCharacter.PhenotypeData
+    -- local VCharacterPhenotypeData = getCharacterPhenotypeData()
+    if not VCharacterPhenotypeData then
+        print("No instance of 'VCharacterPhenotypeData' was found.\n")
         return
     end
 
     local data = {
-        CurrentRace = UVRaceSexMenuViewModelInstance.CurrentRace:ToString(),
-        CurrentSex = UVRaceSexMenuViewModelInstance.CurrentSex
+        -- CurrentRace = UVRaceSexMenuViewModelInstance.CurrentRace:ToString(),
+        Race = VPairedCharacter.Race:GetFullName(),
+        Sex = VPairedCharacter.Sex,
+        -- Body = VPairedCharacter:GetBodyMesh().SkeletalMesh:GetFullName()
+        -- CurrentSex = UVRaceSexMenuViewModelInstance.CurrentSex
         -- CurrentArchetype = UVRaceSexMenuViewModelInstance.CurrentArchetype
         -- MorphTargets = {},
         -- ColorTargets = {},
@@ -275,7 +309,7 @@ function SaveCharacterData(name, description, author)
     data.ModCreator = "animandan"
 
 
-    local filePath = presetLocation .. name .. ".json"
+    local filePath = save_dir .. name .. ".json"
 
     -- Write to JSON file
     local file = io.open(filePath, "w")
@@ -296,21 +330,28 @@ function sleep(ms)
 end
 
 
-function LoadPhenotypeDataFields(data)
-    local BP_OblivionPlayerCharacter_C = FindFirstOf("BP_OblivionPlayerCharacter_C")
-    if not BP_OblivionPlayerCharacter_C
-    then
-        print("No instance of 'BP_OblivionPlayerCharacter_C' was found.\n")
-        return
+function LoadPhenotypeDataFields(data, character)
+    local VPairedCharacter = nil
+    local VCharacterPhenotypeData = nil
+    if character == nil then
+        VPairedCharacter = FindFirstOf("BP_OblivionPlayerCharacter_C")
+        if not VPairedCharacter
+        then
+            print("No instance of 'BP_OblivionPlayerCharacter_C' was found.\n")
+            return
+        end
+    else
+        VPairedCharacter = character
     end
-    local VCharacterPhenotypeData = BP_OblivionPlayerCharacter_C.PhenotypeData
+    VCharacterPhenotypeData = VPairedCharacter.PhenotypeData
     -- local VCharacterPhenotypeData = getCharacterPhenotypeData()
     if not VCharacterPhenotypeData then
         print("No instance of 'VCharacterPhenotypeData' was found.\n")
         return
     end
 
-    sleep(delayTime)
+
+    -- sleep(delayTime)
     
     
     -- ExecuteInGameThread(function()
@@ -419,7 +460,7 @@ sleep(delayTime)
     end
 end)
 
-sleep(delayTime)
+-- sleep(delayTime)
 
     -- print("[RaceMenuUtilities] Assign HairColors")
     -- -- ExecuteInGameThread(function()
@@ -431,7 +472,7 @@ sleep(delayTime)
     -- end                 
 -- end)
 
-sleep(delayTime)
+-- sleep(delayTime)
 
     
     -- -- ExecuteInGameThread(function()
@@ -448,7 +489,7 @@ sleep(delayTime)
     -- end
 -- end)
 
-sleep(delayTime)
+-- sleep(delayTime)
 
    
 --     ExecuteInGameThread(function()
@@ -458,7 +499,7 @@ sleep(delayTime)
 --     end
 -- end)
 
-sleep(delayTime)
+-- sleep(delayTime)
 
 --     print("[RaceMenuUtilities] Assign BodyProperties")
 --     ExecuteInGameThread(function()
@@ -471,15 +512,16 @@ sleep(delayTime)
 --     end
 -- end)
 
---     print("[RaceMenuUtilities] Assign FaceMaterialSlotOverrides")
---     ExecuteInGameThread(function()
---     if data.FaceMaterialSlotOverrides then
---         -- VCharacterPhenotypeData.FaceMaterialSlotOverrides = {}
---         for key, value in pairs(data.FaceMaterialSlotOverrides) do
---             VCharacterPhenotypeData.FaceMaterialSlotOverrides.Add(FName(key), LoadAsset(value))
---         end
---     end
--- end)
+    
+    ExecuteInGameThread(function()
+        if data.FaceMaterialSlotOverrides then
+            print("[RaceMenuUtilities] Assign FaceMaterialSlotOverrides")
+            -- VCharacterPhenotypeData.FaceMaterialSlotOverrides = {}
+            for key, value in pairs(data.FaceMaterialSlotOverrides) do
+                VCharacterPhenotypeData.FaceMaterialSlotOverrides.Add(FName(key), LoadAsset(value))
+            end
+        end
+    end)
 
 sleep(delayTime)
 
@@ -522,20 +564,20 @@ sleep(delayTime)
         for key, value in pairs(data.SkinColorsMapL) do
             sleep(delayTime)
             ExecuteInGameThread(function()
-            print("Updating SkinColorsMapL: " .. tostring(key) .. " = " .. tostring(value))
-            keyFName = FName(key)
-            if not keyFName then
-                print("Failed to create FName from key: " .. tostring(key))
-                return
-            end
-            local FLinearColor = {}
-            FLinearColor.R = value.R
-            FLinearColor.G = value.G
-            FLinearColor.B = value.B
-            FLinearColor.A = value.A
-            VCharacterPhenotypeData.SkinColorsMapL:Add(keyFName, FLinearColor)
-        end)
-    end
+                print("Updating SkinColorsMapL: " .. tostring(key) .. " = " .. tostring(value))
+                keyFName = FName(key)
+                if not keyFName then
+                    print("Failed to create FName from key: " .. tostring(key))
+                    return
+                end
+                local FLinearColor = {}
+                FLinearColor.R = value.R
+                FLinearColor.G = value.G
+                FLinearColor.B = value.B
+                FLinearColor.A = value.A
+                VCharacterPhenotypeData.SkinColorsMapL:Add(keyFName, FLinearColor)
+            end)
+        end
     end
 
 sleep(delayTime)
@@ -548,9 +590,7 @@ sleep(delayTime)
     end
 end)
 
-ExecuteInGameThread(function()
-    BP_OblivionPlayerCharacter_C:RefreshAppearance(15)
-end)
+
 
 sleep(delayTime)
 
@@ -565,6 +605,13 @@ sleep(delayTime)
         VCharacterPhenotypeData.CustomisationEyeMaterialIndex = data.CustomisationEyeMaterialIndex
     end
 end)
+
+
+sleep(delayTime)
+
+    ExecuteInGameThread(function()
+        VPairedCharacter:RefreshAppearance(15)
+    end)
 
     print("Phenotype data loaded into VCharacterPhenotypeData.")
 end
@@ -581,7 +628,7 @@ function RefreshCharacterAppearance()
 end
 
 
-local function LoadCharacterData(name)
+function LoadCharacterData(name)
     local filePath = presetLocation .. name .. ".json"
     if not filePath then
         print("No file path provided.")
@@ -800,12 +847,12 @@ local function LoadCharacterData(name)
     sleep(delayTime)
 
 
-    if data.FaceMaterialSlotOverrides then
-        for key, value in pairs(data.FaceMaterialSlotOverrides) do
-            sleep(delayTime)
-            SetFaceMaterial(key, value)
-        end
-    end
+    -- if data.FaceMaterialSlotOverrides then
+    --     for key, value in pairs(data.FaceMaterialSlotOverrides) do
+    --         sleep(delayTime)
+    --         SetFaceMaterial(key, value)
+    --     end
+    -- end
 
     sleep(delayTime)
 
@@ -884,8 +931,9 @@ RegisterConsoleCommandHandler("rmu", function(FullCommand, Parameters, OutputDev
                 end 
             end)
         elseif Parameters[1] == "list" then
+            local dir = Parameters[2] or presetLocation
             printAndOutput("Listing character data...\n", OutputDevice)
-            local filePath = "ue4ss\\Mods\\RaceMenuUtilities\\Presets\\"
+            local filePath = dir
             local files = {}
             for file in io.popen('dir "' .. filePath .. '" /b'):lines() do
                 table.insert(files, file)
@@ -903,11 +951,12 @@ RegisterConsoleCommandHandler("rmu", function(FullCommand, Parameters, OutputDev
                     if not err then
                         table.insert(characterData, {
                             Name = data.Name or "Unknown",
-                            Race = data.CurrentRace or "Unknown",
-                            Type = data.CurrentSex or "Unknown",
+                            Race = getNameFromFullName(data.Race) or data.CurrentRace or "Unknown",
+                            Type = data.Sex or data.CurrentSex or "Unknown",
                             Description = data.Description or "No description",
                             Author = data.Author or "Unknown",
-                            Date = data.Date or "Unknown"
+                            Date = data.Date or "Unknown",
+                            APIVersion = data.APIVersion or "Unknown"
                         })
                     else
                         printAndOutput("Failed to decode JSON for file: " .. file, OutputDevice)
@@ -929,9 +978,9 @@ RegisterConsoleCommandHandler("rmu", function(FullCommand, Parameters, OutputDev
             end)
 
             -- Print and output the sorted data
-            printAndOutput(string.format("%-20s %-15s %-10s %-30s %-20s %-20s", "Name", "Race", "Type", "Description", "Author", "Date"), OutputDevice)
+            printAndOutput(string.format("%-20s   %-15s   %-10s   %-30s   %-20s   %-30s   %-20s", "Name", "Race", "Type", "Description", "Author", "Date", "APIVersion"), OutputDevice)
             for _, char in ipairs(characterData) do
-                printAndOutput(string.format("%-20s %-15s %-10s %-30s %-20s %-20s", char.Name, char.Race, char.Type, char.Description, char.Author, char.Date), OutputDevice)
+                printAndOutput(string.format("%-20s   %-15s   %-10s   %-30s   %-20s   %-30s   %-20s", char.Name, char.Race, char.Type, char.Description, char.Author, char.Date, char.APIVersion), OutputDevice)
             end
         elseif Parameters[1] == "set" then
             local assetType = Parameters[2]
@@ -945,21 +994,33 @@ RegisterConsoleCommandHandler("rmu", function(FullCommand, Parameters, OutputDev
             if assetType == "hair" then
                 printAndOutput("Setting Hair...", OutputDevice)
                 SetHair(assetPath)
+            elseif assetType == "beard" then
+                printAndOutput("Setting Beard...", OutputDevice)
+                SetBeard(assetPath)
+            elseif assetType == "mustache" then
+                printAndOutput("Setting Mustache...", OutputDevice)
+                SetMustache(assetPath)
+            elseif assetType == "eyebrows" then
+                printAndOutput("Setting Eyebrows...", OutputDevice)
+                SetEyebrows(assetPath)
             elseif assetType == "eyes" then
                 printAndOutput("Setting Eyes...", OutputDevice)
                 SetEyes(assetPath)
             elseif assetType == "face" then
                 printAndOutput("Setting Base Face Mesh...", OutputDevice)
                 SetBaseFaceMesh(assetPath)
-            -- elseif assetType == "skin" then
-            --     printAndOutput("Setting Skin Parameter...", OutputDevice)
-            --     local parameterName = Parameters[3]
-            --     local value = tonumber(Parameters[4])
-            --     if not parameterName or not value then
-            --         printAndOutput("Invalid parameters. Usage: rmu set skin <parameterName> <value>", OutputDevice)
-            --         return false
-            --     end
-            --     SetSkinParameter(parameterName, value)
+            -- elseif assetType == "body" then
+            --     printAndOutput("Setting Body Mesh...", OutputDevice)
+            --     SetBody(assetPath)
+            elseif assetType == "skin" then
+                printAndOutput("Setting Skin Parameter...", OutputDevice)
+                local parameterName = Parameters[3]
+                local value = tonumber(Parameters[4])
+                if not parameterName or not value then
+                    printAndOutput("Invalid parameters. Usage: rmu set skin <parameterName> <value>", OutputDevice)
+                    return false
+                end
+                SetSkinParameter(parameterName, value)
             -- elseif assetType == "color" then
             --     printAndOutput("Setting Skin Color Parameter...", OutputDevice)
             --     local parameterName = Parameters[3]
@@ -1017,14 +1078,26 @@ RegisterConsoleCommandHandler("rmu", function(FullCommand, Parameters, OutputDev
             printAndOutput("1. SAVE BEFORE RUNNING COMMANDS", OutputDevice)
             printAndOutput("2. If your name or desciption has spaces, surround them in quotes like this \"Has Spaces\"", OutputDevice)
             printAndOutput("3. The console behaves strangely on the racemenu, it helps to be clicked on to the Overview tab", OutputDevice)
+        elseif Parameters[1] == "close" then
+            CloseMenu()
         else
             printAndOutput("Unknown command. Use 'rmu help' for a list of commands.\n", OutputDevice)
         end
 
-
--- end)
     return true
 end)
+
+
+function CloseMenu()
+        local UVRaceSexMenuViewModelInstance = FindFirstOf("VRaceSexMenuViewModel") --UVRaceSexMenuViewModel
+        if not UVRaceSexMenuViewModelInstance or not UVRaceSexMenuViewModelInstance:IsValid() then
+            print("Invalid UVRaceSexMenuViewModelInstance provided.")
+            return
+        end
+
+        UVRaceSexMenuViewModelInstance:CloseMenu(1)
+end
+
 
 
 function SetHair(assetPath)
@@ -1047,6 +1120,65 @@ function SetHair(assetPath)
     end)
 end
 
+function SetBeard(assetPath)
+    ExecuteInGameThread(function()
+        local BP_OblivionPlayerCharacter_C = FindFirstOf("BP_OblivionPlayerCharacter_C")
+        if not BP_OblivionPlayerCharacter_C then
+            print("No instance of 'BP_OblivionPlayerCharacter_C' was found.\n")
+            return
+        end
+
+        local Beard = LoadAsset(assetPath)
+        if not Beard or not Beard:IsValid() then
+            print("Failed to load Beard asset: " .. assetPath)
+            return
+        end
+
+        print("Setting Hair: " .. tostring(Beard:GetFullName()))
+        BP_OblivionPlayerCharacter_C.PhenotypeData.Beard = Beard
+        BP_OblivionPlayerCharacter_C:RefreshAppearance(15)
+    end)
+end
+
+function SetMustache(assetPath)
+    ExecuteInGameThread(function()
+        local BP_OblivionPlayerCharacter_C = FindFirstOf("BP_OblivionPlayerCharacter_C")
+        if not BP_OblivionPlayerCharacter_C then
+            print("No instance of 'BP_OblivionPlayerCharacter_C' was found.\n")
+            return
+        end
+
+        local Mustache = LoadAsset(assetPath)
+        if not Mustache or not Mustache:IsValid() then
+            print("Failed to load Mustache asset: " .. assetPath)
+            return
+        end
+
+        print("Setting Hair: " .. tostring(Mustache:GetFullName()))
+        BP_OblivionPlayerCharacter_C.PhenotypeData.Mustache = Mustache
+        BP_OblivionPlayerCharacter_C:RefreshAppearance(15)
+    end)
+end
+
+function SetEyebrows(assetPath)
+    ExecuteInGameThread(function()
+        local BP_OblivionPlayerCharacter_C = FindFirstOf("BP_OblivionPlayerCharacter_C")
+        if not BP_OblivionPlayerCharacter_C then
+            print("No instance of 'BP_OblivionPlayerCharacter_C' was found.\n")
+            return
+        end
+
+        local Eyebrows = LoadAsset(assetPath)
+        if not Eyebrows or not Eyebrows:IsValid() then
+            print("Failed to load Eyebrows asset: " .. assetPath)
+            return
+        end
+
+        print("Setting Hair: " .. tostring(Eyebrows:GetFullName()))
+        BP_OblivionPlayerCharacter_C.PhenotypeData.Eyebrows = Eyebrows
+        BP_OblivionPlayerCharacter_C:RefreshAppearance(15)
+    end)
+end
 
 function SetEyes(assetPath)
     ExecuteInGameThread(function()
@@ -1153,6 +1285,15 @@ function SetSkinParameter(parameterName, value)
 
         print("Setting Skin Parameter: " .. tostring(keyFName) .. " = " .. tostring(value))
         VPhenotypeCustomizationSession:SetSkinParameter(keyFName, value, true)
+
+
+        local BP_OblivionPlayerCharacter_C = FindFirstOf("BP_OblivionPlayerCharacter_C")
+        if not BP_OblivionPlayerCharacter_C
+        then
+            print("No instance of 'BP_OblivionPlayerCharacter_C' was found.\n")
+            return
+        end
+        BP_OblivionPlayerCharacter_C:RefreshAppearance(15)
     end)
 end
 
@@ -1256,6 +1397,29 @@ end
 --     end)
 -- end
 
+-- function SetBody(assetPath)
+--     ExecuteInGameThread(function()
+--         local BP_OblivionPlayerCharacter_C = FindFirstOf("BP_OblivionPlayerCharacter_C")
+--         if not BP_OblivionPlayerCharacter_C
+--         then
+--             print("No instance of 'BP_OblivionPlayerCharacter_C' was found.\n")
+--             return
+--         end
+
+--         local SkeletalMeshComponent = BP_OblivionPlayerCharacter_C:GetBodyMesh()
+--         local Body = LoadAsset(assetPath)
+--         if not Body or not Body:IsValid() then
+--             print("Failed to bodymesh asset: " .. assetPath)
+--             return
+--         end
+
+--         SkeletalMeshComponent:SetSkeletalMeshAsset(Body)
+--         -- SkeletalMeshComponent:SetSkinnedAssetAndUpdate(Body, true)
+
+--         BP_OblivionPlayerCharacter_C:RefreshAppearance(15)
+--     end)
+-- end
+
 -- function SetBodySectionsOnMesh(assetPath)
 --     ExecuteInGameThread(function()
 
@@ -1321,8 +1485,9 @@ end
 -- end
 
 
-function LoadJson(name)
-    local filePath = presetLocation .. name .. ".json"
+function LoadJson(name, dir)
+    local dir = dir or presetLocation
+    local filePath = dir .. name .. ".json"
     if not filePath then
         print("No file path provided.")
         return nil
