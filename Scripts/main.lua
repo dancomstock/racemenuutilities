@@ -5,6 +5,9 @@
 config = require("config") -- Load the config file
 delayMultiplier = config.delayMultiplier -- Multiplier for the delay time for loading each piece of a preset.
 presetLocation = config.presetLocation -- The location you want to save and load presets from.
+enableNBO = config.enableNBO
+NBOLocation = config.NBOLocation
+NBOPresetLocation = config.NBOPresetLocation
 
 
 local UEHelpers = require("UEHelpers")
@@ -36,19 +39,6 @@ unloadedRaces = {
     VampireRace = 5,
 }
 
-
--- RacesPtrArrayOrder = {
---     DarkElf = 1,
---     Imperial = 2,
---     Argonian = 3,
---     Breton = 4,
---     Orc = 5,
---     Redguard = 6,
---     Nord = 7,
---     WoodElf = 8,
---     Khajiit = 9,
---     HighElf = 10
--- }
 
 
 
@@ -308,6 +298,11 @@ function SaveCharacterData(name, description, author, character, save_dir)
     data.ModName = "RaceMenuUtilities"
     data.ModCreator = "animandan"
 
+    if enableNBO then
+        local NBOPath = NBOLocation .. "FEMALE_Body.json"
+        local NBOData = LoadJson_new(NBOPath)
+        data.NBO = NBOData or {}
+    end
 
     local filePath = save_dir .. name .. ".json"
 
@@ -399,7 +394,7 @@ function LoadPhenotypeDataFields(data, character)
     end
 -- end)
 
-sleep(delayTime)
+    sleep(delayTime)
 
     -- BP_OblivionPlayerCharacter_C:RefreshAppearance(15)
         
@@ -424,28 +419,28 @@ sleep(delayTime)
         
    
     ExecuteInGameThread(function()
-    if data.Eyebrows then 
-        print("[RaceMenuUtilities] Assign Eyebrows")
-        Eyebrows = LoadAsset(data.Eyebrows)
-        VCharacterPhenotypeData.Eyebrows = Eyebrows
-    end
-    if data.CustomisationEyebrowsIndex then
-        VCharacterPhenotypeData.CustomisationEyebrowsIndex = data.CustomisationEyebrowsIndex
-    end
-end)
+        if data.Eyebrows then 
+                print("[RaceMenuUtilities] Assign Eyebrows")
+                Eyebrows = LoadAsset(data.Eyebrows)
+                VCharacterPhenotypeData.Eyebrows = Eyebrows
+            end
+            if data.CustomisationEyebrowsIndex then
+                VCharacterPhenotypeData.CustomisationEyebrowsIndex = data.CustomisationEyebrowsIndex
+        end
+    end)
 
-sleep(delayTime)
+    sleep(delayTime)
 
     
     ExecuteInGameThread(function()
-    if data.Mustache then
-        print("[RaceMenuUtilities] Assign Mustache")
-        VCharacterPhenotypeData.Mustache = LoadAsset(data.Mustache)
-    end
-    if data.CustomisationMustacheIndex then
-        VCharacterPhenotypeData.CustomisationMustacheIndex = data.CustomisationMustacheIndex
-    end
-end)
+        if data.Mustache then
+            print("[RaceMenuUtilities] Assign Mustache")
+            VCharacterPhenotypeData.Mustache = LoadAsset(data.Mustache)
+        end
+        if data.CustomisationMustacheIndex then
+            VCharacterPhenotypeData.CustomisationMustacheIndex = data.CustomisationMustacheIndex
+        end
+    end)
 
 sleep(delayTime)
 
@@ -580,38 +575,47 @@ sleep(delayTime)
         end
     end
 
-sleep(delayTime)
+    sleep(delayTime)
 
     
     ExecuteInGameThread(function()
-    if data.SenescenceLevel then
-        print("[RaceMenuUtilities] Assign SenescenceLevel")
-        VCharacterPhenotypeData.SenescenceLevel = data.SenescenceLevel
-    end
-end)
+        if data.SenescenceLevel then
+            print("[RaceMenuUtilities] Assign SenescenceLevel")
+            VCharacterPhenotypeData.SenescenceLevel = data.SenescenceLevel
+        end
+    end)
 
 
 
-sleep(delayTime)
+    sleep(delayTime)
 
 
    
     ExecuteInGameThread(function()
-    if data.EyeMaterial then 
-        print("[RaceMenuUtilities] Assign EyeMaterial")
-        VCharacterPhenotypeData.EyeMaterial = LoadAsset(data.EyeMaterial)
-    end
-    if data.CustomisationEyeMaterialIndex then
-        VCharacterPhenotypeData.CustomisationEyeMaterialIndex = data.CustomisationEyeMaterialIndex
-    end
-end)
+        if data.EyeMaterial then 
+            print("[RaceMenuUtilities] Assign EyeMaterial")
+            VCharacterPhenotypeData.EyeMaterial = LoadAsset(data.EyeMaterial)
+        end
+        if data.CustomisationEyeMaterialIndex then
+            VCharacterPhenotypeData.CustomisationEyeMaterialIndex = data.CustomisationEyeMaterialIndex
+        end
+    end)
 
 
-sleep(delayTime)
+    sleep(delayTime)
+
+    if enableNBO then
+        local NBOPath = NBOLocation .. "FEMALE_Body.json"
+        SaveJson(data.NBO, NBOPath)
+    end
+
+    sleep(delayTime)
 
     ExecuteInGameThread(function()
         VPairedCharacter:RefreshAppearance(15)
     end)
+
+
 
     print("Phenotype data loaded into VCharacterPhenotypeData.")
 end
@@ -950,7 +954,7 @@ RegisterConsoleCommandHandler("rmu", function(FullCommand, Parameters, OutputDev
                     local data, _, err = json.decode(content, 1, nil)
                     if not err then
                         table.insert(characterData, {
-                            Name = data.Name or "Unknown",
+                            Name = file:gsub("%.json$", ""),
                             Race = getNameFromFullName(data.Race) or data.CurrentRace or "Unknown",
                             Type = data.Sex or data.CurrentSex or "Unknown",
                             Description = data.Description or "No description",
@@ -1080,6 +1084,15 @@ RegisterConsoleCommandHandler("rmu", function(FullCommand, Parameters, OutputDev
             printAndOutput("3. The console behaves strangely on the racemenu, it helps to be clicked on to the Overview tab", OutputDevice)
         elseif Parameters[1] == "close" then
             CloseMenu()
+        elseif Parameters[1] == "nbo" then
+            local name = Parameters[3]
+            if Parameters[2] == "set" then
+                SetNBO(name)
+            elseif Parameters[2] == "save" then     
+                SaveNBO(name)
+            else
+                printAndOutput("Incorrect parameters for NBO\n", OutputDevice)
+            end
         else
             printAndOutput("Unknown command. Use 'rmu help' for a list of commands.\n", OutputDevice)
         end
@@ -1511,6 +1524,75 @@ function LoadJson(name, dir)
     end
     return data
 end
+
+
+function SetNBO(name, dir)
+    local dir = dir or NBOPresetLocation
+    local filePath = dir .. name .. ".json"
+    local NBOPath = NBOLocation .. "FEMALE_Body.json"
+    local NBOData = LoadJson_new(filePath)
+    SaveJson(NBOData, NBOPath)
+
+    local BP_OblivionPlayerCharacter_C = FindFirstOf("BP_OblivionPlayerCharacter_C")
+    if not BP_OblivionPlayerCharacter_C
+    then
+        print("No instance of 'BP_OblivionPlayerCharacter_C' was found.\n")
+        return
+    end
+    BP_OblivionPlayerCharacter_C:RefreshAppearance(15)
+
+end
+
+function SaveNBO(name, dir)
+    local dir = dir or NBOPresetLocation
+    local filePath = dir .. name .. ".json"
+    local NBOPath = NBOLocation .. "FEMALE_Body.json"
+    local NBOData = LoadJson_new(NBOPath)
+    SaveJson(NBOData, filePath)
+end
+
+
+function SaveJson(data, filePath)
+    local file = io.open(filePath, "w")
+    if file then
+        local jsonData = json.encode(data, { indent = true }) -- Use dkjson's encode function
+        file:write(jsonData)
+        file:close()
+        print("Character data saved to " .. filePath)
+    else
+        print("Failed to open file for writing: " .. filePath)
+    end
+end
+
+
+function LoadJson_new(filePath)
+    -- local dir = dir or presetLocation
+    -- local filePath = dir .. name .. ".json"
+    local data = {}
+    if not filePath then
+        print("No file path provided.")
+        return nil
+    end
+    print("File path: " .. filePath)
+    print("Loading character data from " .. filePath)
+
+    local file = io.open(filePath, "r")
+    if not file then
+        print("Failed to open file for reading: " .. filePath)
+        return nil
+    end
+
+    local content = file:read("*a")
+    file:close()
+
+    local data, pos, err = json.decode(content, 1, nil)
+    if err then
+        print("Failed to decode JSON data: " .. err)
+        return nil
+    end
+    return data
+end
+
 
 -- function RunTest(assetPath)
 --     ExecuteAsync(function()
